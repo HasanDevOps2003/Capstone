@@ -33,7 +33,7 @@ jobs:
       - run:
           name: build docker (via Dockerfile)
           command: |
-            ./run_docker.sh
+            sudo ./run_docker.sh
             # ./upload_docker.sh
 
 workflows:
