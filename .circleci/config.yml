@@ -1,0 +1,19 @@
+jobs:
+  setup-environment:
+    docker:
+      - image: python:3.7.3-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: make setup (via Makefile)
+          command: |
+            make setup
+      - run:
+          name: make install (via Makefile)
+          command: |
+            make install
+      - run:
+          name: make lint (via Makefile)
+          command: |
+            make lint
