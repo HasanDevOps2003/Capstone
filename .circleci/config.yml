@@ -19,8 +19,26 @@ jobs:
           name: make lint (via Makefile)
           command: |
             make lint
+  build-docker:
+    docker:
+      - image: docker:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: install dependencies
+          command: |
+            apk update && apk add bash
+      - run:
+          name: build docker (via Dockerfile)
+          command: |
+            ./run_docker.sh
+            # ./upload_docker.sh
 
 workflows:
   captone:
     jobs:
       - setup-environment
+      - build-docker:
+          requires: [setup-environment]
