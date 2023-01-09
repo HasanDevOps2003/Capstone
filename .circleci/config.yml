@@ -17,3 +17,8 @@ jobs:
           name: make lint (via Makefile)
           command: |
             make lint
+
+workflows:
+  captone:
+    jobs:
+      - setup-environment
