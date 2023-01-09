@@ -34,7 +34,7 @@ jobs:
           name: build docker (via Dockerfile)
           command: |
             sh ./run_docker.sh
-            # ./upload_docker.sh
+            sh ./upload_docker.sh
 
 workflows:
   captone:
