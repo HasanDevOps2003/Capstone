@@ -41,15 +41,16 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - apk add --update tar gzip nodejs npm curl
-      - pip install awscli
-      - aws --version
+      # - run: yum -y install tar gzip
+      - run: apk add --update tar gzip nodejs npm curl 
+      - run: pip install awscli
+      - run: aws --version
       - run:
-        name: install eksctl
-        command: |
-          #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          #sudo mv /tmp/eksctl /usr/local/bin
-          eksctl --version
+          name: install aws eks
+          command: |
+            # curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" | tar -xvf -C /tmp
+            # sudo mv /tmp/eksctl /usr/local/bin
+            eksctl --version
 
 
 
