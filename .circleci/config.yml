@@ -16,7 +16,6 @@ jobs:
           name: make setup (via Makefile)
           command: |
             make setup
-            sleep 600;
       - run:
           name: make install (via Makefile)
           command: |
