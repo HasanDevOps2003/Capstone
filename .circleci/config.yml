@@ -48,7 +48,11 @@ jobs:
           name: install aws eks
           command: |
             sh ./install_eksctl.sh
-
+      - run:
+          name: install kubectl
+          command: |
+            #sh ./install_kubectl.sh
+            kubectl version --client
 
 
 
