@@ -52,7 +52,12 @@ jobs:
           name: install kubectl
           command: |
             sh ./install_kubectl.sh
-
+      - run:
+          name: create aws eks cluster
+          command: |
+            eksctl create cluster --name capstone-cluster --region=us-east-1
+            eksctl utils describe-stacks --region=us-east-1 --cluster=capstone-cluster
+            eksctl get cluster --name=capstone-cluster --region=us-east-1
 
 
 
