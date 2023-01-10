@@ -58,7 +58,13 @@ jobs:
             eksctl create cluster --name capstone-cluster --region=us-east-1
             eksctl utils describe-stacks --region=us-east-1 --cluster=capstone-cluster
             eksctl get cluster --name=capstone-cluster --region=us-east-1
-
+      - run:
+          name: deploy app
+          command: |
+            kubectl get nodes
+            kubectl create deploy capstoneproject --image=muhmmadhasan2003/capstoneproject
+            kubectl get deploy,rs,svc,pods
+            kubectl port-forward capstoneproject 8000:80
 
 
 workflows:
