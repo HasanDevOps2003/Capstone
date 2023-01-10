@@ -1,6 +1,5 @@
 version: 2.1
-orbs:
-  aws-eks: circleci/aws-eks@2.2.0
+
 jobs:
   setup-environment:
     docker:
@@ -48,8 +47,8 @@ jobs:
       - run:
           name: install aws eks
           command: |
-            # curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" | tar -xvf -C /tmp
-            # sudo mv /tmp/eksctl /usr/local/bin
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" | tar -xvf -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
             eksctl --version
 
 
