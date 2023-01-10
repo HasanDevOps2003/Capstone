@@ -69,6 +69,7 @@ jobs:
           command: |
             kubectl get nodes
             kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject
+            sleep 600;
             kubectl get deployments,rs,svc,pods
             #kubectl port-forward capstoneproject 8000:80
   # create-deployment:
