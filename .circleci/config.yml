@@ -1,7 +1,7 @@
 version: 2.1
-orbs:
-  aws-eks: circleci/aws-eks@1.1.0
-  kubernetes: circleci/kubernetes@0.4.0
+# orbs:
+#   aws-eks: circleci/aws-eks@1.1.0
+#   kubernetes: circleci/kubernetes@0.4.0
 jobs:
   setup-environment:
     docker:
@@ -37,67 +37,70 @@ jobs:
           command: |
             sh ./run_docker.sh
             sh ./upload_docker.sh
-  # deploy-eks:
-  #   docker:
-  #     - image: python:3.7-alpine3.11
+  deploy-eks:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      # - run: yum -y install tar gzip
+      - run: apk add --update tar gzip nodejs npm curl 
+      - run: pip install awscli
+      - run: aws --version
+      - run:
+          name: install aws eks
+          command: |
+            sh ./install_eksctl.sh
+      - run:
+          name: install kubectl
+          command: |
+            sh ./install_kubectl.sh
+      - run:
+          name: create aws eks cluster
+          command: |
+            eksctl create cluster --name capstone-cluster --region=us-east-1
+            eksctl utils describe-stacks --region=us-east-1 --cluster=capstone-cluster
+            eksctl get cluster --name=capstone-cluster --region=us-east-1
+      - run:
+          name: deploy app
+          command: |
+            git clone https://github.com/HasanDevOps2003/Capstone.git
+            cd Capstone
+            ./run_docker.sh
+            kubectl get nodes
+            kubectl create deploy capstoneproject --image=muhmmadhasan2003/capstoneproject
+            kubectl get deploy,rs,svc,pods
+            kubectl port-forward capstoneproject 8000:80
+  # create-deployment:
+  #   executor: aws-eks/python3
+  #   parameters:
+  #     cluster-name:
+  #       description: |
+  #         Name of the EKS cluster
+  #       type: string
   #   steps:
   #     - checkout
-  #     # - run: yum -y install tar gzip
-  #     - run: apk add --update tar gzip nodejs npm curl 
-  #     - run: pip install awscli
-  #     - run: aws --version
-  #     - run:
-  #         name: install aws eks
-  #         command: |
-  #           sh ./install_eksctl.sh
-  #     - run:
-  #         name: install kubectl
-  #         command: |
-  #           sh ./install_kubectl.sh
-  #     - run:
-  #         name: create aws eks cluster
-  #         command: |
-  #           eksctl create cluster --name capstone-cluster --region=us-east-1
-  #           eksctl utils describe-stacks --region=us-east-1 --cluster=capstone-cluster
-  #           eksctl get cluster --name=capstone-cluster --region=us-east-1
-  #     - run:
-  #         name: deploy app
-  #         command: |
-  #           kubectl get nodes
-  #           kubectl create deploy capstoneproject --image=muhmmadhasan2003/capstoneproject
-  #           kubectl get deploy,rs,svc,pods
-  #           kubectl port-forward capstoneproject 8000:80
-  create-deployment:
-    executor: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - checkout
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
-          install-kubectl: true
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: deployment.json
-          resource-name: deployment/blue
-  create-service:
-    executor: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - checkout
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
-          install-kubectl: true
-      - kubernetes/create-or-update-resource:
-          resource-file-path: service.json
-          resource-name: service/bluegreenlb
+  #     - aws-eks/update-kubeconfig-with-authenticator:
+  #         cluster-name: << parameters.cluster-name >>
+  #         install-kubectl: true
+  #     - kubernetes/create-or-update-resource:
+  #         get-rollout-status: true
+  #         resource-file-path: deployment.json
+  #         resource-name: deployment/blue
+  # create-service:
+  #   executor: aws-eks/python3
+  #   parameters:
+  #     cluster-name:
+  #       description: |
+  #         Name of the EKS cluster
+  #       type: string
+  #   steps:
+  #     - checkout
+  #     - aws-eks/update-kubeconfig-with-authenticator:
+  #         cluster-name: << parameters.cluster-name >>
+  #         install-kubectl: true
+  #     - kubernetes/create-or-update-resource:
+  #         resource-file-path: service.json
+  #         resource-name: service/bluegreenlb
 
 
 
@@ -107,19 +110,19 @@ workflows:
       - setup-environment
       - build-docker:
           requires: [setup-environment]
-      # - deploy-eks:
-      #     requires: [build-docker]
-      - create-service:
-          cluster-name: capstone-cluster
+      - deploy-eks:
           requires: [build-docker]
-      - create-deployment:
-          cluster-name: capstone-cluster
-          requires:
-            - create-service
-      - aws-eks/update-container-image:
-          cluster-name: eks-demo-deployment
-          container-image-updates: 'muhmmadhasan2003/capstoneproject'
-          record: true
-          requires:
-            - create-deployment
-          resource-name: deployment/blue
+      # - create-service:
+      #     cluster-name: capstone-cluster
+      #     requires: [build-docker]
+      # - create-deployment:
+      #     cluster-name: capstone-cluster
+      #     requires:
+      #       - create-service
+      # - aws-eks/update-container-image:
+      #     cluster-name: eks-demo-deployment
+      #     container-image-updates: 'muhmmadhasan2003/capstoneproject'
+      #     record: true
+      #     requires:
+      #       - create-deployment
+      #     resource-name: deployment/blue
