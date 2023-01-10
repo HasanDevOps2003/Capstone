@@ -41,9 +41,9 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - run: apk add --update tar gzip nodejs npm curl
-      - run: pip install awscli
-      - run: aws --version
+      - apk add --update tar gzip nodejs npm curl
+      - pip install awscli
+      - aws --version
       - run:
         name: install eksctl
         command: |
