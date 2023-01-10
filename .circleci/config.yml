@@ -35,10 +35,17 @@ jobs:
           command: |
             sh ./run_docker.sh
             sh ./upload_docker.sh
-
+  check-version:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - eksctl --version
+      - kubectl version
 workflows:
   captone:
     jobs:
       - setup-environment
+      - check-version
       - build-docker:
           requires: [setup-environment]
