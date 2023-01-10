@@ -67,9 +67,9 @@ jobs:
           name: deploy app
           command: |
             kubectl get nodes
-            kubectl create deploy capstoneproject --image=muhmmadhasan2003/capstoneproject
-            kubectl get deploy,rs,svc,pods
-            kubectl port-forward capstoneproject 8000:80
+            kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject
+            kubectl get deployments
+            #kubectl port-forward capstoneproject 8000:80
   # create-deployment:
   #   executor: aws-eks/python3
   #   parameters:
