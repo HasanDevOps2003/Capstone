@@ -22,7 +22,7 @@ jobs:
       - image: python:3.7.3-stretch
     working_directory: ~/repo
     steps:
-      - print_pipeine_id
+      - print_pipeline_id
       - checkout
       - run:
           name: make setup (via Makefile)
@@ -82,7 +82,7 @@ jobs:
             kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject
             sleep 60;
             kubectl get deployments,rs,svc,pods
-            kubectl port-forward pod/capstoneproject 8000:80
+            kubectl port-forward pod/capstoneproject-995457cfd 8000:80
   # create-deployment:
   #   executor: aws-eks/python3
   #   parameters:
