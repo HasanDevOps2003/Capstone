@@ -35,17 +35,29 @@ jobs:
           command: |
             sh ./run_docker.sh
             sh ./upload_docker.sh
-  check-version:
+  deploy-eks:
     docker:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - eksctl --version
-      - kubectl version
+      - run: apk add --update tar gzip nodejs npm curl
+      - run: pip install awscli
+      - run: aws --version
+      - run:
+        name: install eksctl
+        command: |
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+          eksctl --version
+
+
+
+
 workflows:
   captone:
     jobs:
       - setup-environment
-      - check-version
       - build-docker:
           requires: [setup-environment]
+      - deploy-eks:
+          requires: [build-docker]
