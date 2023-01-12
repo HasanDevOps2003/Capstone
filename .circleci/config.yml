@@ -57,10 +57,6 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - apk add --update git
-      - apk add --update nodejs npm
-      - npm i -g yarn
-      # - run: yum -y install tar gzip
       - run: apk add --update tar gzip nodejs npm curl 
       - run: pip install awscli
       - run: aws --version
