@@ -72,6 +72,7 @@ jobs:
       - run:
           name: create aws eks cluster
           command: |
+            aws sts get-caller-identity
             eksctl create cluster --name capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1 --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d
             eksctl utils describe-stacks --region=us-east-1 --cluster=capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7}
             eksctl get cluster --name=capstone-eks-cluster-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1
