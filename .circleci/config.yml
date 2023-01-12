@@ -79,11 +79,12 @@ jobs:
           name: deploy app
           command: |
             kubectl get nodes
-            kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject #&&
-              #kubectl expose deployment/capstoneproject --type="LoadBalancer" --port 80
-            sleep 60;
-            kubectl get deployments,rs,svc,pods
-            kubectl port-forward service/capstoneproject 5000:5000
+            kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject 
+            kubectl expose deployment capstoneproject  --type=ClusterIP  --name=capstoneproject-cluster-ip
+            kubectl get service capstoneproject-cluster-ip
+            #sleep 60;
+            #kubectl get deployments,rs,svc,pods
+            #kubectl port-forward service/capstoneproject 5000:5000
   # create-deployment:
   #   executor: aws-eks/python3
   #   parameters:
