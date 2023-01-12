@@ -82,18 +82,18 @@ jobs:
             #git clone https://github.com/HasanDevOps2003/Capstone.git
             #cd Capstone
             #./run_docker.sh
-            ls
+            #ls
             kubectl get nodes
-            kubectl apply -f /deployment.yaml
-            kubectl get pods -l 'app=capstoneproject' -o wide | awk {'print $1" " $3 " " $6'} | column -t
-            kubectl create -f /clusterip.yaml
-            kubectl get service capstoneproject-cluster-ip
-            #kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject 
+            #kubectl apply -f /deployment.yaml
+            #kubectl get pods -l 'app=capstoneproject' -o wide | awk {'print $1" " $3 " " $6'} | column -t
+            #kubectl create -f /clusterip.yaml
+            #kubectl get service capstoneproject-cluster-ip
+            kubectl create deployment capstoneproject --image=muhmmadhasan2003/capstoneproject 
             #kubectl expose deployment capstoneproject  --type=ClusterIP  --name=capstoneproject-cluster-ip --port 5000
             #kubectl get service capstoneproject-cluster-ip
             #sleep 60;
-            #kubectl get deployments,rs,svc,pods
-            #kubectl port-forward capstoneproject 80:8000
+            kubectl get deployments,rs,svc,pods
+            kubectl port-forward pod valid-pod --address 0.0.0.0 5000:5000
   # create-deployment:
   #   executor: aws-eks/python3
   #   parameters:
