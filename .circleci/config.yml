@@ -57,6 +57,9 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - apk add --update git
+      - apk add --update nodejs npm
+      - npm i -g yarn
       # - run: yum -y install tar gzip
       - run: apk add --update tar gzip nodejs npm curl 
       - run: pip install awscli
@@ -79,9 +82,9 @@ jobs:
       - run:
           name: deploy app
           command: |
-            #git clone https://github.com/HasanDevOps2003/Capstone.git
-            #cd Capstone
-            #./run_docker.sh
+            git clone https://github.com/HasanDevOps2003/Capstone.git
+            cd Capstone
+            ./run_docker.sh
             #ls
             kubectl get nodes
             #kubectl apply -f /deployment.yaml
