@@ -87,11 +87,8 @@ jobs:
               kubectl expose deployment/capstoneproject --type="LoadBalancer" --port 80
             #kubectl expose deployment capstoneproject  --type=ClusterIP  --name=capstoneproject-cluster-ip --port 5000
             #kubectl get service capstoneproject-cluster-ip
-            kubectl get services
-            sleep 300;
-            kubectl get services
-            minikube service capstoneproject
-            #kubectl get deployments,rs,svc,pods
+            #sleep 60;
+            kubectl get deployments,rs,svc,pods
             #kubectl port-forward pod valid-pod --address 0.0.0.0 5000:5000
   # create-deployment:
   #   executor: aws-eks/python3
